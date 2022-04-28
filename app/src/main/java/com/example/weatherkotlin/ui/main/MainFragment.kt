@@ -1,11 +1,10 @@
 package com.example.weatherkotlin.ui.main
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.weatherkotlin.R
 import com.example.weatherkotlin.databinding.MainFragmentBinding
@@ -13,10 +12,10 @@ import com.example.weatherkotlin.model.AppState
 import com.example.weatherkotlin.model.entites.Weather
 import com.example.weatherkotlin.ui.main.adapters.MainFragmentAdapter
 import com.example.weatherkotlin.ui.main.details.DetailsFragment
+import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import com.google.android.material.snackbar.Snackbar as Snackbar
 
-class MainFragment : Fragment() {
+class  MainFragment : Fragment() {
     private val viewModel: MainViewModel by viewModel()
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!

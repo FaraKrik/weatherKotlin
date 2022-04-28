@@ -7,11 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.weatherkotlin.R
 import com.example.weatherkotlin.databinding.DetailsFragmentBinding
+import com.example.weatherkotlin.model.AppState
 import com.example.weatherkotlin.model.entites.Weather
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DetailsFragment : Fragment() {
     private var _binding: DetailsFragmentBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: DetailsViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,8 +35,28 @@ class DetailsFragment : Fragment() {
                     city.lat.toString(),
                     city.lon.toString()
                 )
-                temperatureValue.text = it.temperature.toString()
-                feelsLikeValue.text = it.feelsLike.toString()
+                viewModel.weatherLiveData.observe(viewLifecycleOwner) { appState ->
+                    when (appState) {
+                        is AppState.Error -> {
+                            mainView.visibility = View.INVISIBLE
+                            progressBar.visibility = View.GONE
+                            errorTV.visibility = View.VISIBLE
+                        }
+                        AppState.Loading -> {
+                            mainView.visibility = View.INVISIBLE
+                            progressBar.visibility = View.VISIBLE
+                        }
+                        is AppState.Success -> {
+                            progressBar.visibility = View.GONE
+                            mainView.visibility = View.VISIBLE
+                            temperatureValue.text = appState.weatherData[0].temperature.toString()
+                            feelsLikeValue.text = appState.weatherData[0].feelsLike.toString()
+                            weatherCondition.text = appState.weatherData[0].condition
+                        }
+                    }
+
+                }
+                viewModel.loadData(city.lat, city.lon)
             }
         }
     }
