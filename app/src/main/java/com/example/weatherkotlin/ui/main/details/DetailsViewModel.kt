@@ -3,8 +3,13 @@ package com.example.weatherkotlin.ui.main.details
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.weatherkotlin.model.AppState
 import com.example.weatherkotlin.model.repository.Repository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 
 class DetailsViewModel(private val repository: Repository) : ViewModel() {
     private val localLiveData: MutableLiveData<AppState> = MutableLiveData()
@@ -12,9 +17,14 @@ class DetailsViewModel(private val repository: Repository) : ViewModel() {
 
     fun loadData(lat: Double, lon: Double) {
         localLiveData.value = AppState.Loading
-        Thread {
-            val data = repository.getWeatherFromServer(lat, lon)
-            localLiveData.postValue(AppState.Success(listOf(data)))
-        }.start()
+        viewModelScope.launch(Dispatchers.Main) {
+            val task = async(Dispatchers.IO) {
+                repository.getWeatherFromServer(lat, lon)
+            }
+            val data = task.await()
+            if (isActive) {
+                localLiveData.value = AppState.Success(listOf(data))
+            }
+        }
     }
 }
