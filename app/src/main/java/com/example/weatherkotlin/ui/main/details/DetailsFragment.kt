@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import coil.load
 import com.example.weatherkotlin.R
 import com.example.weatherkotlin.databinding.DetailsFragmentBinding
 import com.example.weatherkotlin.model.AppState
@@ -52,6 +53,10 @@ class DetailsFragment : Fragment() {
                             temperatureValue.text = appState.weatherData[0].temperature.toString()
                             feelsLikeValue.text = appState.weatherData[0].feelsLike.toString()
                             weatherCondition.text = appState.weatherData[0].condition
+
+                            imageView.load("https://freepngimg.com/thumb/city/36275-3-city-hd.png") {
+                                crossfade(true)
+                            }
                         }
                     }
 
