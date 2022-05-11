@@ -1,12 +1,14 @@
 package com.example.weatherkotlin.model.repository
 
-import com.example.weatherkotlin.model.WeatherLoader
+import com.example.weatherkotlin.model.database.Database
+import com.example.weatherkotlin.model.database.HistoryEntity
+import com.example.weatherkotlin.model.entites.City
 import com.example.weatherkotlin.model.entites.Weather
 import com.example.weatherkotlin.model.entites.getRussianCities
 import com.example.weatherkotlin.model.entites.getWorldCities
 import com.example.weatherkotlin.model.rest.WeatherRepo
 
-class RepositoryImpl : Repository {
+class RepositoryImpl(private val db: Database) : Repository {
     override fun getWeatherFromServer(lat: Double, lon: Double): Weather {
         //val dto = WeatherLoader.loadWeather(lat, lon)
         /*val dto = WeatherRepo.api.getWeather(lat, lon).enqueue(object : Callback<WeatherDTO> {
@@ -34,4 +36,27 @@ class RepositoryImpl : Repository {
     override fun getWeatherFromLocalStorageRus() = getRussianCities()
 
     override fun getWeatherFromLocalStorageWorld() = getWorldCities()
+
+    override fun saveEntity(weather: Weather) {
+        db.historyDao().insert(convertWeatherToEntity(weather))
+    }
+
+    override fun getAllHistory(): List<Weather> {
+        return convertHistoryEntityToWeather(db.historyDao().all())
+    }
+
+    private fun convertHistoryEntityToWeather(entityList: List<HistoryEntity>): List<Weather> {
+        return entityList.map {
+            Weather(City(it.city, 0.0, 0.0), it.temperature, 0, it.condition)
+        }
+    }
+
+
+    private fun convertWeatherToEntity(weather: Weather): HistoryEntity {
+        return HistoryEntity(
+            0, weather.city.city,
+            weather.temperature,
+            weather.condition ?: ""
+        )
+    }
 }

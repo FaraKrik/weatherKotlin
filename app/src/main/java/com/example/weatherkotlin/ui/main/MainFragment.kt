@@ -1,5 +1,6 @@
 package com.example.weatherkotlin.ui.main
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +16,9 @@ import com.example.weatherkotlin.ui.main.details.DetailsFragment
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class  MainFragment : Fragment() {
+private const val dataSetKey = "dataSetKey"
+
+class MainFragment : Fragment() {
     private val viewModel: MainViewModel by viewModel()
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
@@ -41,9 +44,12 @@ class  MainFragment : Fragment() {
             viewModel.liveData.observe(viewLifecycleOwner, observer)
             viewModel.getWeatherFromLocalSourceRus()
         }
+
+        loadDataSet()
+        initDataSet()
     }
 
-    private fun changeWeatherDataSet() = with(binding) {
+    private fun initDataSet() = with(binding) {
         if (isDataSetRus) {
             viewModel.getWeatherFromLocalSourceWorld()
             mainFragmentFAB.setImageResource(R.drawable.ic_earth)
@@ -51,7 +57,28 @@ class  MainFragment : Fragment() {
             viewModel.getWeatherFromLocalSourceRus()
             mainFragmentFAB.setImageResource(R.drawable.ic_russia)
         }
+        saveDataSetToDisk()
+    }
+
+    private fun loadDataSet() {
+        activity?.let {
+            isDataSetRus = activity
+                ?.getPreferences(Context.MODE_PRIVATE)
+                ?.getBoolean(dataSetKey, true)
+                ?: true
+        }
+    }
+
+    private fun saveDataSetToDisk() {
+        val editor = activity?.getPreferences(Context.MODE_PRIVATE)?.edit()
+        editor?.putBoolean(dataSetKey, isDataSetRus)
+        editor?.apply()
+
+    }
+
+    private fun changeWeatherDataSet() = with(binding) {
         isDataSetRus = !isDataSetRus
+        initDataSet()
     }
 
     private fun renderData(appState: AppState) = with(binding) {

@@ -3,6 +3,7 @@ package com.example.weatherkotlin
 import android.content.Context
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
 fun Date.isFriday() : Boolean {
@@ -25,4 +26,13 @@ fun View.hideKeyboard(): Boolean {
         return inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
     } catch (ignored: RuntimeException) { }
     return false
+}
+
+fun View.showSnackBar(
+    text: String,
+    actionText: String,
+    length: Int = Snackbar.LENGTH_INDEFINITE,
+    action: (View) -> Unit,
+) {
+    Snackbar.make(this, text, length).setAction(actionText, action).show()
 }
