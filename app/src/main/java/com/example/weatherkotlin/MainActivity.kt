@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
+import com.example.weatherkotlin.ui.main.ContentProviderFragment
 import com.example.weatherkotlin.ui.main.MainFragment
 import com.example.weatherkotlin.ui.main.history.HistoryFragment
 import com.example.weatherkotlin.ui.main.threads.ThreadsFragment
@@ -36,6 +37,10 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.menu_history -> {
                 openFragment(HistoryFragment.newInstance())
+                true
+            }
+            R.id.menu_content_provider -> {
+                openFragment(ContentProviderFragment.newInstance())
                 true
             }
             else -> super.onOptionsItemSelected(item)

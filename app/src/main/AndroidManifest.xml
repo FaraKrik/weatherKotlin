@@ -3,33 +3,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.weatherkotlin">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.WeatherKotlin"
-        android:name=".App">
+        android:theme="@style/Theme.WeatherKotlin">
+        <provider
+            android:name=".model.repository.contentprovider.EducationContentProvider"
+            android:authorities="geekbrains.provider"
+            android:enabled="true"
+            android:exported="true"></provider>
 
         <activity
             android:name=".MainActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".services.UsualService"/>
-        <service android:name=".services.ForegroundService"/>
-        <service android:name=".services.BoundService"/>
-        <receiver android:name=".receivers.MainBroadcastReceiver"
-            android:exported="true"
-            android:enabled="true">
+
+        <service android:name=".services.UsualService" />
+        <service android:name=".services.ForegroundService" />
+        <service android:name=".services.BoundService" />
+
+        <receiver
+            android:name=".receivers.MainBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.LOCALE_CHANGED" />
             </intent-filter>
