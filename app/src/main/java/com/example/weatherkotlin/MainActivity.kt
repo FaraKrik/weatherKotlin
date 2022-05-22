@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import com.example.weatherkotlin.ui.main.ContentProviderFragment
 import com.example.weatherkotlin.ui.main.MainFragment
 import com.example.weatherkotlin.ui.main.history.HistoryFragment
+import com.example.weatherkotlin.ui.main.maps.MapsFragment
 import com.example.weatherkotlin.ui.main.threads.ThreadsFragment
 
 class MainActivity : AppCompatActivity() {
@@ -41,6 +42,10 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.menu_content_provider -> {
                 openFragment(ContentProviderFragment.newInstance())
+                true
+            }
+            R.id.menu_google_maps -> {
+               openFragment(MapsFragment.newInstance())
                 true
             }
             else -> super.onOptionsItemSelected(item)
