@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.weatherkotlin.ui.main.ContentProviderFragment
 import com.example.weatherkotlin.ui.main.MainFragment
@@ -21,6 +22,9 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.container, MainFragment.newInstance())
                 .commitNow()
         }
+
+        val ticketId = intent.extras?.getString("ticketId", "0")
+        Toast.makeText(this, ticketId.toString(), Toast.LENGTH_SHORT).show()
 
         //UsualService.start(baseContext)
     }
@@ -45,7 +49,7 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.menu_google_maps -> {
-               openFragment(MapsFragment.newInstance())
+                openFragment(MapsFragment.newInstance())
                 true
             }
             else -> super.onOptionsItemSelected(item)
